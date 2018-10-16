@@ -2,13 +2,14 @@ function [array] = myNewtonCaller(d, zoom_times, res, directions)
 %set(0,'DefaultFigureVisible','on')
 t1 = tic;
 tol = .5;
-n = 200;
+n = 100;
 ULcorner = [-2,2];
 sqrL = 4;
 array = zeros(res,res,zoom_times);
 fprintf('Started computation of fractal 1 / %d \n', zoom_times); 
 % INITIAL PICTURE OF WHOLE FRACTAL
-[~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,1);
+a = 2.1;
+[out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,1);
 array(:,:,1) = out;
 prevULcorner = ULcorner;   
 sqrL = sqrL/2;
@@ -21,7 +22,7 @@ fprintf('Estimated time remaining for fractal computation: %g mins \n', t2*(zoom
         if strcmp(directions(i-1),'C')
             ULcorner(1) = prevULcorner(1) + (1/2)*sqrL;
             ULcorner(2)= prevULcorner(2) - (1/2)*sqrL;
-            [~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,i);
+            [out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,i);
             array(:,:,i) = out;
             %saveas(fig ,[pwd sprintf('/IMGS/PNGS/%s.png', titles)]);
             prevULcorner = ULcorner;            
@@ -31,7 +32,7 @@ fprintf('Estimated time remaining for fractal computation: %g mins \n', t2*(zoom
         elseif strcmp(directions(i-1),'L')
             ULcorner(1)=prevULcorner(1);
             ULcorner(2)=prevULcorner(2) - (1/2)*sqrL;
-            [~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,i);
+            [out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,i);
             array(:,:,i) = out;
             prevULcorner = ULcorner;
             sqrL = sqrL/2;
@@ -40,7 +41,7 @@ fprintf('Estimated time remaining for fractal computation: %g mins \n', t2*(zoom
         elseif strcmp(directions(i-1),'R')   
             ULcorner(1)=prevULcorner(1) + sqrL;
             ULcorner(2)=prevULcorner(2) - (1/2)*sqrL;
-            [~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,i);
+            [out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,i);
             array(:,:,i) = out;
             prevULcorner = ULcorner;
             sqrL = sqrL/2;    
@@ -48,7 +49,7 @@ fprintf('Estimated time remaining for fractal computation: %g mins \n', t2*(zoom
         % Fractal centered at the center of the TOP HALF of the previous fractal
         elseif strcmp(directions(i-1),'T')
             ULcorner(1)=prevULcorner(1) + (1/2)*sqrL;
-            [~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,i);
+            [out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,i);
             array(:,:,i) = out;
             prevULcorner = ULcorner;
             sqrL = sqrL/2;
@@ -57,7 +58,7 @@ fprintf('Estimated time remaining for fractal computation: %g mins \n', t2*(zoom
         elseif strcmp(directions(i-1),'B') 
             ULcorner(1)=prevULcorner(1) + (1/2)*sqrL;
             ULcorner(2)=prevULcorner(2) - sqrL;
-            [~, out, ~] = NewtonFractal (d,n,tol,res,ULcorner,sqrL,i);
+            [out] = NewtonFractal (a,d,n,tol,res,ULcorner,sqrL,i);
             array(:,:,i) = out;
             prevULcorner = ULcorner;
             sqrL = sqrL/2;
